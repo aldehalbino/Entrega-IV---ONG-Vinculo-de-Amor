@@ -60,3 +60,14 @@ a{ color: var(--color-primary-dark); }
 .btn-ghost:hover{ background: var(--color-neutral-200); }
 :root[data-theme="dark"] .btn-ghost:hover{ background:#23292e; }
 :root[data-theme="hc"] .btn-ghost{ border-color:#000; }
+
+/* região para anúncios a leitores de tela */
+.sr-only {
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* respeita usuários com “reduzir animações” */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

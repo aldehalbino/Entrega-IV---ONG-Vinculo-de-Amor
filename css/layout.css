@@ -218,3 +218,11 @@ nav a { min-height: 44px; line-height: 1.2; }
   /* submenu no mobile */
   nav li.has-dropdown.open .dropdown{ display: block; position: static; box-shadow: none; background: transparent; border: 0; }
 }
+
+/* header usa variações para garantir contraste AA */
+header { background: var(--color-primary-dark); }
+:root:not([data-theme]) header { background: var(--color-primary); }
+:root[data-theme="dark"] header { background: #0f3a17; }  /* verde bem escuro para 4.5:1 */
+:root[data-theme="hc"] header { background: #ffffff; }    /* alto contraste */
+:root[data-theme="hc"] header h1,
+:root[data-theme="hc"] nav a { color: #000 !important; }

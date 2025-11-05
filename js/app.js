@@ -59,43 +59,57 @@ if (projItem && projLink) {
   });
 }
 
-// Tema acessível: claro/escuro/alto contraste
+// Tema acessível: claro/escuro/alto contraste + anúncio por aria-live
 (function(){
   const root = document.documentElement;
   const btnDark = document.getElementById('toggle-dark');
   const btnHC = document.getElementById('toggle-contrast');
+  const live = document.getElementById('a11y-live');
 
-  // restaura tema salvo
-  const saved = localStorage.getItem('theme'); // 'dark' | 'hc' | 'light' | null
-  if(saved === 'dark' || saved === 'hc'){
-    root.setAttribute('data-theme', saved);
-    if(btnDark) btnDark.setAttribute('aria-pressed', String(saved==='dark'));
-    if(btnHC) btnHC.setAttribute('aria-pressed', String(saved==='hc'));
+  function announce(msg){
+    if(!live) return;
+    live.textContent = ''; // força reanúncio
+    setTimeout(()=> live.textContent = msg, 50);
   }
+
+  function setTheme(val){ // '', 'dark', 'hc'
+    if(val) {
+      root.setAttribute('data-theme', val);
+      localStorage.setItem('theme', val);
+    } else {
+      root.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    }
+    // estados dos botões
+    if(btnDark){
+      const isDark = val === 'dark';
+      btnDark.setAttribute('aria-pressed', String(isDark));
+      btnDark.textContent = isDark ? 'Modo claro' : 'Modo escuro';
+    }
+    if(btnHC){
+      const isHC = val === 'hc';
+      btnHC.setAttribute('aria-pressed', String(isHC));
+      btnHC.textContent = isHC ? 'Desativar alto contraste' : 'Alto contraste';
+    }
+  }
+
+  // restaura preferido
+  const saved = localStorage.getItem('theme');
+  setTheme(saved === 'dark' || saved === 'hc' ? saved : '');
 
   // alterna modo escuro
-  if(btnDark){
-    btnDark.addEventListener('click', ()=>{
-      const isDark = root.getAttribute('data-theme') === 'dark';
-      const next = isDark ? '' : 'dark';
-      if(next === 'dark'){ root.setAttribute('data-theme','dark'); localStorage.setItem('theme','dark'); }
-      else{ root.removeAttribute('data-theme'); localStorage.removeItem('theme'); }
-      btnDark.setAttribute('aria-pressed', String(next==='dark'));
-      if(btnHC){ btnHC.setAttribute('aria-pressed','false'); }
-    });
-  }
+  btnDark?.addEventListener('click', ()=>{
+    const current = root.getAttribute('data-theme');
+    if(current === 'dark'){ setTheme(''); announce('Modo claro ativado'); }
+    else { setTheme('dark'); announce('Modo escuro ativado'); }
+  });
 
-  // alterna alto contraste (prioriza sobre dark)
-  if(btnHC){
-    btnHC.addEventListener('click', ()=>{
-      const isHC = root.getAttribute('data-theme') === 'hc';
-      const next = isHC ? '' : 'hc';
-      if(next === 'hc'){ root.setAttribute('data-theme','hc'); localStorage.setItem('theme','hc'); }
-      else{ root.removeAttribute('data-theme'); localStorage.removeItem('theme'); }
-      btnHC.setAttribute('aria-pressed', String(next==='hc'));
-      if(btnDark){ btnDark.setAttribute('aria-pressed','false'); }
-    });
-  }
+  // alterna alto contraste (tem prioridade sobre o dark)
+  btnHC?.addEventListener('click', ()=>{
+    const current = root.getAttribute('data-theme');
+    if(current === 'hc'){ setTheme(''); announce('Alto contraste desativado'); }
+    else { setTheme('hc'); announce('Alto contraste ativado'); }
+  });
 })();
 
 // Acessibilidade do menu: teclado, estados ARIA e comportamento mobile

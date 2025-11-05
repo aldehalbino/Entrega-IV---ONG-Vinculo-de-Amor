@@ -141,3 +141,50 @@ input:focus, textarea:focus { outline: 2px solid var(--color-primary); }
   min-height: 44px;
   padding: 8px 12px;
 }
+
+/* botões fantasma – contraste AA nos três temas */
+.btn-ghost{
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255,255,255,.8);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-ghost:hover,
+.btn-ghost:focus-visible{
+  background: rgba(255,255,255,.12);
+}
+
+/* no tema claro */
+:root:not([data-theme]) .btn-ghost{
+  color: var(--color-neutral-900);
+  border-color: var(--color-neutral-900);
+}
+:root:not([data-theme]) .btn-ghost:hover,
+:root:not([data-theme]) .btn-ghost:focus-visible{
+  background: rgba(0,0,0,.06);
+}
+
+/* no tema escuro */
+:root[data-theme="dark"] .btn-ghost{
+  color: #eaeaea;
+  border-color: #eaeaea;
+}
+:root[data-theme="dark"] .btn-ghost:hover,
+:root[data-theme="dark"] .btn-ghost:focus-visible{
+  background: rgba(255,255,255,.10);
+}
+
+/* alto contraste (preto no branco) */
+:root[data-theme="hc"] .btn-ghost{
+  color: #000;
+  border-color: #000;
+  background: #fff;
+}
+:root[data-theme="hc"] .btn-ghost:hover,
+:root[data-theme="hc"] .btn-ghost:focus-visible{
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
