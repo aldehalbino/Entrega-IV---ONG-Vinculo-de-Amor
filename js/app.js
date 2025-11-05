@@ -58,3 +58,42 @@ if (projItem && projLink) {
     if (window.innerWidth <= 768) projItem.classList.remove('open');
   });
 }
+
+// Tema acessível: claro/escuro/alto contraste
+(function(){
+  const root = document.documentElement;
+  const btnDark = document.getElementById('toggle-dark');
+  const btnHC = document.getElementById('toggle-contrast');
+
+  // restaura tema salvo
+  const saved = localStorage.getItem('theme'); // 'dark' | 'hc' | 'light' | null
+  if(saved === 'dark' || saved === 'hc'){
+    root.setAttribute('data-theme', saved);
+    if(btnDark) btnDark.setAttribute('aria-pressed', String(saved==='dark'));
+    if(btnHC) btnHC.setAttribute('aria-pressed', String(saved==='hc'));
+  }
+
+  // alterna modo escuro
+  if(btnDark){
+    btnDark.addEventListener('click', ()=>{
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      const next = isDark ? '' : 'dark';
+      if(next === 'dark'){ root.setAttribute('data-theme','dark'); localStorage.setItem('theme','dark'); }
+      else{ root.removeAttribute('data-theme'); localStorage.removeItem('theme'); }
+      btnDark.setAttribute('aria-pressed', String(next==='dark'));
+      if(btnHC){ btnHC.setAttribute('aria-pressed','false'); }
+    });
+  }
+
+  // alterna alto contraste (prioriza sobre dark)
+  if(btnHC){
+    btnHC.addEventListener('click', ()=>{
+      const isHC = root.getAttribute('data-theme') === 'hc';
+      const next = isHC ? '' : 'hc';
+      if(next === 'hc'){ root.setAttribute('data-theme','hc'); localStorage.setItem('theme','hc'); }
+      else{ root.removeAttribute('data-theme'); localStorage.removeItem('theme'); }
+      btnHC.setAttribute('aria-pressed', String(next==='hc'));
+      if(btnDark){ btnDark.setAttribute('aria-pressed','false'); }
+    });
+  }
+})();

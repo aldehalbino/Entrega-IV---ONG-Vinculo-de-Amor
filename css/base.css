@@ -22,3 +22,41 @@ a:hover {
 img {
   border-radius: 8px;
 }
+
+/* Cores de texto e fundo baseadas nas variáveis */
+html, body{ background: var(--bg); color: var(--text); }
+header, footer{ color:#fff; }
+
+/* Links */
+a{ color: var(--color-primary-dark); }
+:root[data-theme="dark"] a{ color: var(--color-primary-light); }
+:root[data-theme="hc"] a{ color: #000; text-decoration: underline; }
+
+/* Foco visível para teclado (WCAG) */
+:focus-visible{
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Skip link para leitores de tela e teclado */
+.skip-link{
+  position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+}
+.skip-link:focus{
+  position:static; width:auto; height:auto; padding:6px 10px; background:#fff; color:#000;
+  border:2px solid var(--focus-ring); border-radius:8px;
+}
+
+/* Superfícies */
+.card{ background: var(--surface); border:1px solid var(--border); }
+
+/* Toolbar de acessibilidade */
+.access-toolbar{ display:flex; gap:8px; margin: var(--sp-8) 0; }
+.btn-ghost{
+  background: transparent; color: inherit; border:1px solid var(--border);
+  padding:6px 10px; border-radius:8px; cursor:pointer;
+}
+.btn-ghost:hover{ background: var(--color-neutral-200); }
+:root[data-theme="dark"] .btn-ghost:hover{ background:#23292e; }
+:root[data-theme="hc"] .btn-ghost{ border-color:#000; }
