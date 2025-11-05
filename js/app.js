@@ -97,3 +97,91 @@ if (projItem && projLink) {
     });
   }
 })();
+
+// Acessibilidade do menu: teclado, estados ARIA e comportamento mobile
+(function(){
+  const nav = document.getElementById('menu');
+  const menuBtn = document.getElementById('menu-toggle');
+  if(!nav) return;
+
+  // hambúrguer abre/fecha o container <nav>
+  if(menuBtn){
+    menuBtn.addEventListener('click', ()=>{
+      const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', String(!expanded));
+      nav.classList.toggle('open', !expanded);
+    });
+  }
+
+  // submenu "Projetos"
+  const ddLi = nav.querySelector('.has-dropdown');
+  if(!ddLi) return;
+
+  const trigger = ddLi.querySelector(':scope > a');           // link "Projetos"
+  const submenu = ddLi.querySelector(':scope > .dropdown');   // <ul> do dropdown
+  const links = submenu ? submenu.querySelectorAll('a') : [];
+
+  function open(){
+    ddLi.classList.add('open');
+    trigger?.setAttribute('aria-expanded', 'true');
+  }
+  function close(){
+    ddLi.classList.remove('open');
+    trigger?.setAttribute('aria-expanded', 'false');
+  }
+
+  // mouse e foco
+  trigger?.addEventListener('mouseenter', open);
+  ddLi.addEventListener('mouseleave', close);
+  trigger?.addEventListener('focus', open);
+
+  // teclado no trigger
+  trigger?.addEventListener('keydown', (e)=>{
+    const k = e.key;
+    if(k === 'Enter' || k === ' ' || k === 'ArrowDown'){
+      e.preventDefault();
+      open();
+      links[0]?.focus();
+    }
+    if(k === 'Escape'){
+      e.preventDefault();
+      close();
+      trigger.focus();
+    }
+  });
+
+  // navegação por setas dentro do submenu
+  submenu?.addEventListener('keydown', (e)=>{
+    const list = Array.from(links);
+    const i = list.indexOf(document.activeElement);
+    if(e.key === 'ArrowDown'){
+      e.preventDefault();
+      (list[i+1] || list[0]).focus();
+    }
+    if(e.key === 'ArrowUp'){
+      e.preventDefault();
+      (list[i-1] || list[list.length-1]).focus();
+    }
+    if(e.key === 'Home'){ e.preventDefault(); list[0]?.focus(); }
+    if(e.key === 'End'){ e.preventDefault(); list[list.length-1]?.focus(); }
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      close();
+      trigger?.focus();
+    }
+  });
+
+  // clique fora fecha o submenu
+  document.addEventListener('click', (e)=>{
+    if(!ddLi.contains(e.target)) close();
+  });
+
+  // no mobile, clique em "Projetos" apenas abre/fecha o submenu (não navega)
+  trigger?.addEventListener('click', (e)=>{
+    if(window.innerWidth <= 768){
+      e.preventDefault();
+      ddLi.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', String(ddLi.classList.contains('open')));
+    }
+  });
+})();

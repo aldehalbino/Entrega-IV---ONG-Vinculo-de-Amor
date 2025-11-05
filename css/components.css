@@ -128,3 +128,16 @@ input:focus, textarea:focus { outline: 2px solid var(--color-primary); }
   /* se quiser abrir no toque, pode adicionar classe .open via JS */
   .has-dropdown.open .dropdown { display: block; }
 }
+
+/* foco visível consistente em links do dropdown */
+.dropdown a:focus-visible{
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* alvos de toque de 44px (WCAG) */
+#menu-toggle, .btn-ghost, nav a{
+  min-height: 44px;
+  padding: 8px 12px;
+}

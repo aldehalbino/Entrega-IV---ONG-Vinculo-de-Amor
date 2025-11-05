@@ -197,3 +197,24 @@ nav .dropdown{
   border:1px solid var(--border);
 }
 nav .dropdown a{ color: var(--text); }
+
+/* foco e contraste no nav */
+nav a:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; border-radius: 6px; }
+nav a { min-height: 44px; line-height: 1.2; }
+
+/* mobile: abre/fecha menu quando nav recebe .open */
+@media (max-width: 768px){
+  nav .menu{
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: var(--sp-8);
+  }
+  nav.open .menu{ display: flex; }
+
+  /* submenu no mobile */
+  nav li.has-dropdown.open .dropdown{ display: block; position: static; box-shadow: none; background: transparent; border: 0; }
+}
