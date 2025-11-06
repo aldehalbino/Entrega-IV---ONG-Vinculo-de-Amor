@@ -1,65 +1,4 @@
-// ponto de entrada da SPA
-// roteador + menu mobile/submenu com comportamento correto
-
-import { $, $$, on } from './dom.js';
-import { startRouter } from './router.js';
-
-// região principal
-const root = $('#app');
-startRouter(root);
-
-// --- MENU HAMBÚRGUER ---
-const toggle = $('#menu-toggle');
-const menu = document.querySelector('nav ul.menu') || document.querySelector('nav ul');
-
-if (toggle && menu) {
-  on(toggle, 'click', () => {
-    const open = menu.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', String(open));
-  });
-
-  // fecha o menu depois de navegar (mobile)
-  $$('.menu a').forEach(a => {
-    on(a, 'click', () => {
-      if (window.innerWidth <= 768 && menu.classList.contains('open')) {
-        menu.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-  });
-
-  // se voltar ao desktop, zera estado
-  on(window, 'resize', () => {
-    if (window.innerWidth > 768) {
-      menu.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    }
-  });
-}
-
-// --- SUBMENU (mobile) ---
-// 1º toque em "Projetos" abre submenu; 2º toque navega para #/projetos
-const projItem = document.querySelector('li.has-dropdown');
-const projLink = projItem?.querySelector(':scope > a');
-
-if (projItem && projLink) {
-  on(projLink, 'click', (e) => {
-    if (window.innerWidth <= 768) {
-      const isOpen = projItem.classList.contains('open');
-      if (!isOpen) {
-        e.preventDefault();            // primeiro toque só abre
-        projItem.classList.add('open');
-      } // se já estava aberto, deixa navegar (sem preventDefault)
-    }
-  });
-
-  // ao trocar rota, fecho o submenu no mobile
-  on(window, 'hashchange', () => {
-    if (window.innerWidth <= 768) projItem.classList.remove('open');
-  });
-}
-
-// Tema acessível: claro/escuro/alto contraste + anúncio por aria-live
+/* inicialização de tema acessível (claro/escuro/alto contraste) + aria-live */
 (function(){
   const root = document.documentElement;
   const btnDark = document.getElementById('toggle-dark');
@@ -68,19 +7,18 @@ if (projItem && projLink) {
 
   function announce(msg){
     if(!live) return;
-    live.textContent = ''; // força reanúncio
-    setTimeout(()=> live.textContent = msg, 50);
+    live.textContent = '';
+    setTimeout(()=> live.textContent = msg, 40);
   }
 
   function setTheme(val){ // '', 'dark', 'hc'
-    if(val) {
+    if(val){
       root.setAttribute('data-theme', val);
       localStorage.setItem('theme', val);
-    } else {
+    }else{
       root.removeAttribute('data-theme');
       localStorage.removeItem('theme');
     }
-    // estados dos botões
     if(btnDark){
       const isDark = val === 'dark';
       btnDark.setAttribute('aria-pressed', String(isDark));
@@ -93,32 +31,28 @@ if (projItem && projLink) {
     }
   }
 
-  // restaura preferido
   const saved = localStorage.getItem('theme');
   setTheme(saved === 'dark' || saved === 'hc' ? saved : '');
 
-  // alterna modo escuro
   btnDark?.addEventListener('click', ()=>{
-    const current = root.getAttribute('data-theme');
+    const current = document.documentElement.getAttribute('data-theme');
     if(current === 'dark'){ setTheme(''); announce('Modo claro ativado'); }
     else { setTheme('dark'); announce('Modo escuro ativado'); }
   });
 
-  // alterna alto contraste (tem prioridade sobre o dark)
   btnHC?.addEventListener('click', ()=>{
-    const current = root.getAttribute('data-theme');
+    const current = document.documentElement.getAttribute('data-theme');
     if(current === 'hc'){ setTheme(''); announce('Alto contraste desativado'); }
     else { setTheme('hc'); announce('Alto contraste ativado'); }
   });
 })();
 
-// Acessibilidade do menu: teclado, estados ARIA e comportamento mobile
+/* acessibilidade do menu: teclado, estados ARIA e comportamento mobile */
 (function(){
   const nav = document.getElementById('menu');
   const menuBtn = document.getElementById('menu-toggle');
   if(!nav) return;
 
-  // hambúrguer abre/fecha o container <nav>
   if(menuBtn){
     menuBtn.addEventListener('click', ()=>{
       const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
@@ -127,70 +61,49 @@ if (projItem && projLink) {
     });
   }
 
-  // submenu "Projetos"
   const ddLi = nav.querySelector('.has-dropdown');
   if(!ddLi) return;
 
-  const trigger = ddLi.querySelector(':scope > a');           // link "Projetos"
-  const submenu = ddLi.querySelector(':scope > .dropdown');   // <ul> do dropdown
+  const trigger = ddLi.querySelector(':scope > a');
+  const submenu = ddLi.querySelector(':scope > .dropdown');
   const links = submenu ? submenu.querySelectorAll('a') : [];
 
   function open(){
     ddLi.classList.add('open');
-    trigger?.setAttribute('aria-expanded', 'true');
+    trigger?.setAttribute('aria-expanded','true');
   }
   function close(){
     ddLi.classList.remove('open');
-    trigger?.setAttribute('aria-expanded', 'false');
+    trigger?.setAttribute('aria-expanded','false');
   }
 
-  // mouse e foco
   trigger?.addEventListener('mouseenter', open);
   ddLi.addEventListener('mouseleave', close);
   trigger?.addEventListener('focus', open);
 
-  // teclado no trigger
   trigger?.addEventListener('keydown', (e)=>{
     const k = e.key;
     if(k === 'Enter' || k === ' ' || k === 'ArrowDown'){
-      e.preventDefault();
-      open();
-      links[0]?.focus();
+      e.preventDefault(); open(); links[0]?.focus();
     }
-    if(k === 'Escape'){
-      e.preventDefault();
-      close();
-      trigger.focus();
-    }
+    if(k === 'Escape'){ e.preventDefault(); close(); trigger.focus(); }
   });
 
-  // navegação por setas dentro do submenu
   submenu?.addEventListener('keydown', (e)=>{
     const list = Array.from(links);
     const i = list.indexOf(document.activeElement);
-    if(e.key === 'ArrowDown'){
-      e.preventDefault();
-      (list[i+1] || list[0]).focus();
-    }
-    if(e.key === 'ArrowUp'){
-      e.preventDefault();
-      (list[i-1] || list[list.length-1]).focus();
-    }
+    if(e.key === 'ArrowDown'){ e.preventDefault(); (list[i+1] || list[0]).focus(); }
+    if(e.key === 'ArrowUp'){ e.preventDefault(); (list[i-1] || list[list.length-1]).focus(); }
     if(e.key === 'Home'){ e.preventDefault(); list[0]?.focus(); }
     if(e.key === 'End'){ e.preventDefault(); list[list.length-1]?.focus(); }
-    if(e.key === 'Escape'){
-      e.preventDefault();
-      close();
-      trigger?.focus();
-    }
+    if(e.key === 'Escape'){ e.preventDefault(); close(); trigger?.focus(); }
   });
 
-  // clique fora fecha o submenu
   document.addEventListener('click', (e)=>{
     if(!ddLi.contains(e.target)) close();
   });
 
-  // no mobile, clique em "Projetos" apenas abre/fecha o submenu (não navega)
+  // no mobile, o clique em "Projetos" só abre/fecha o submenu
   trigger?.addEventListener('click', (e)=>{
     if(window.innerWidth <= 768){
       e.preventDefault();
@@ -198,4 +111,21 @@ if (projItem && projLink) {
       trigger.setAttribute('aria-expanded', String(ddLi.classList.contains('open')));
     }
   });
+})();
+
+/* SPA: resolve na carga e quando o hash muda */
+(function(){
+  function boot(){
+    if(window.router && typeof window.router.resolve === 'function'){
+      window.router.resolve();
+    }
+  }
+  window.addEventListener('load', boot);
+  window.addEventListener('hashchange', ()=> window.router && window.router.resolve());
+})();
+
+/* após cada renderização da SPA, leva o foco para o <main> (boa prática WCAG) */
+(function(){
+  const main = document.getElementById('conteudo-principal');
+  window.addEventListener('spa:navigated', ()=>{ if(main) main.focus(); });
 })();
