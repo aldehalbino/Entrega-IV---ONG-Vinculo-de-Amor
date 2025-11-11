@@ -1,5 +1,5 @@
 # ONG Vínculo de Amor  
-**Entrega IV - Desenvolvimento Front-End II**  
+**Entrega IV - Desenvolvimento Front-End**  
 Autora: *Aldenize Albino de Oliveira*  
 Data: Novembro de 2025  
 
