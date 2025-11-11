@@ -1,138 +1,108 @@
 # ONG Vínculo de Amor  
-**Entrega III - Desenvolvimento Front-End**  
+**Entrega IV - Desenvolvimento Front-End II**  
 Autora: *Aldenize Albino de Oliveira*  
-Data: Outubro de 2025  
+Data: Novembro de 2025  
 
 ---
 
 ## Objetivo do Projeto  
-Esta terceira entrega tem como objetivo aplicar **conceitos de JavaScript avançado** para transformar a interface estática desenvolvida nas entregas anteriores em uma **SPA (Single Page Application)** dinâmica, interativa e funcional.  
 
-O projeto da **ONG Vínculo de Amor** evolui para um site com **navegação dinâmica, validação de formulários e componentes reativos**, mantendo a mesma identidade visual e estrutura da entrega anterior.
+Esta entrega final consolida todo o desenvolvimento da aplicação **ONG Vínculo de Amor**, integrando as etapas anteriores e aplicando **práticas profissionais de versionamento, acessibilidade e otimização**.  
+
+O objetivo principal é garantir que o projeto atenda aos critérios da **WCAG 2.1 Nível AA**, apresente **histórico Git estruturado segundo GitFlow**, e esteja **preparado para deploy em ambiente de produção**.  
 
 ---
 
-## Estrutura do Projeto  
+## Especificações Técnicas Implementadas  
 
-Entrega-III-ONG-Vinculo-de-Amor/
+### 🔹 Controle de Versão com Git/GitHub  
+
+- Implementação do **modelo GitFlow** com as branches:  
+  - `main` → versão estável do projeto.  
+  - `develop` → ambiente de integração.  
+  - `feature/acessibilidade` → implementação da acessibilidade e otimizações visuais.  
+
+- Histórico de commits **semântico e organizado**, descrevendo cada alteração com clareza.  
+- Criação de **pull requests documentados** para merge entre branches.  
+- Uso de **issues e milestones** para acompanhamento das etapas de desenvolvimento.  
+
+---
+
+### 🔹 Acessibilidade (WCAG 2.1 - Nível AA)  
+
+O site foi adaptado para garantir **inclusão e usabilidade** conforme as diretrizes do WCAG 2.1 AA:  
+
+- **Navegação completa por teclado** (`Tab`, `Shift+Tab`, `Enter`, `Esc`).  
+- **Foco visível** e consistente em todos os elementos interativos.  
+- **Contraste mínimo de 4.5:1** garantido entre texto e plano de fundo.  
+- **Estrutura semântica adequada** com uso correto de `<header>`, `<main>`, `<nav>`, `<section>` e `<footer>`.  
+- **Atributos ARIA** adicionados para leitores de tela.  
+- Inclusão de **modo escuro** e **modo de alto contraste**, acessíveis via botões interativos.  
+- **Foco automático** no conteúdo principal a cada navegação dentro da SPA.  
+
+---
+
+### 🔹 Otimização para Produção  
+
+- **Minificação de arquivos CSS, JS e HTML**.  
+- **Compressão de imagens** para reduzir o tamanho total da aplicação.  
+- Código modular e reutilizável, com separação clara entre **estilos**, **componentes** e **funções JavaScript**.  
+- SPA otimizada para carregamento dinâmico e rápido.  
+
+---
+
+## Estrutura Final do Projeto  
+
+Entrega-IV-Vinculo-de-Amor/
 │
 ├── css/
-│ ├── variables.css → Sistema de design (cores, fontes e espaçamento)
-│ ├── base.css → Estilos globais e tipografia
-│ ├── layout.css → Estrutura de layout e responsividade
-│ ├── components.css → Botões, formulários e cards
-│ └── responsive.css → Ajustes para diferentes resoluções
+│ ├── variables.css → Variáveis globais (cores, espaçamento e tipografia)
+│ ├── base.css → Estilos base e reset
+│ ├── layout.css → Estrutura do layout, cabeçalho e rodapé
+│ ├── components.css → Botões, formulários, alertas e cartões
+│ └── responsive.css → Responsividade e media queries
 │
 ├── js/
-│ ├── app.js → Inicialização da SPA e lógica principal
-│ ├── router.js → Gerenciamento das rotas (navegação dinâmica)
-│ ├── templates.js → Templates de conteúdo das páginas
-│ ├── dom.js → Manipulação do DOM e utilidades
-│ ├── validator.js → Regras de validação dos formulários
-│ ├── state.js → Armazenamento e gerenciamento de dados
-│ └── screens/
-│     └── cadastro.js → Lógica e validação do formulário de cadastro
+│ ├── app.js → Inicialização da SPA e foco no conteúdo principal
+│ ├── router.js → Controle das rotas da aplicação
+│ ├── templates.js → Templates dinâmicos das páginas
+│ ├── validator.js → Validação e feedback de formulários
+│ ├── dom.js → Manipulação do DOM e estados visuais
+│ └── screens/ → Páginas modulares (resgate, reabilitação, cadastro etc.)
 │
-├── imagens/ → Imagens utilizadas nas seções e projetos
-├── videos/ → Vídeo principal da página inicial
+├── imagens/ → Logotipo e imagens otimizadas dos projetos
+├── videos/ → Vídeo institucional comprimido
 │
-├── index.html → Estrutura principal do site (SPA)
+├── index.html → Estrutura principal da aplicação SPA
 └── README.md
 
----
-
-## Sistema de Design  
-
-Mantém o mesmo sistema visual da **Entrega II**, garantindo consistência entre as versões.
-
-**Paleta de cores (8 tons):**
-- Primária: `#2e7d32`
-- Primária Clara: `#66bb6a`
-- Primária Escura: `#1b5e20`
-- Secundária: `#81c784`
-- Secundária Escura: `#388e3c`
-- Neutras: `#ffffff`, `#f5f5f5`, `#e0e0e0`, `#212121`
-
-**Tipografia Hierárquica (5 tamanhos):**
-- `--font-xs`, `--font-sm`, `--font-md`, `--font-lg`, `--font-xl`
-
-**Sistema de Espaçamento (6 níveis):**
-- `8px, 16px, 24px, 32px, 48px, 64px`
 
 ---
 
-## Estrutura e Funcionalidades  
+## Repositório GitHub  
 
-- **SPA (Single Page Application):** todas as páginas são carregadas dinamicamente sem recarregar o navegador.  
-- **Router em JavaScript:** gerenciamento de rotas e exibição de seções conforme o menu.  
-- **Templates dinâmicos:** conteúdo das páginas definido e injetado via JavaScript.  
-- **Validação de formulários:** checagem de campos obrigatórios com mensagens visuais de erro.  
-- **Sistema modular:** scripts separados por responsabilidade (router, dom, validator, templates, state).  
-- **Design responsivo:** layout adaptado a diferentes resoluções e dispositivos.  
+O projeto foi versionado e publicado no GitHub de forma **pública e acessível**:  
+
+🔗 **Repositório:**  
+[https://github.com/aldehalbino/Entrega-IV---ONG-Vinculo-de-Amor](https://github.com/aldehalbino/Entrega-IV---ONG-Vinculo-de-Amor)
 
 ---
 
-## Navegação  
+## Documentação Técnica  
 
-- Menu principal com as seções:
-  - Início  
-  - Projetos ▾ *(submenu com quatro projetos)*  
-  - Seja um Voluntário  
-
-- Submenu funcional:
-  - Projeto Resgate  
-  - Projeto Reabilitar  
-  - Projeto Novo Lar  
-  - Projeto Educação e Conscientização  
-
-- Menu hambúrguer ativado no mobile, controlado via JavaScript.  
+O repositório contém:  
+- Código-fonte completo e organizado em pastas.  
+- Histórico Git rastreável e padronizado.  
+- Branches de desenvolvimento conforme GitFlow.  
+- Commits semânticos e pull requests documentados.  
+- Arquivo README técnico com descrição das funcionalidades e arquitetura do sistema.  
 
 ---
 
-## Componentes  
+## Status da Entrega  
 
-- **Cards dinâmicos:** utilizados nas seções de projetos e na página inicial.  
-- **Botões interativos:** com estados `hover`, `focus`, `active` e `disabled`.  
-- **Formulário validado:** com verificação visual e mensagens de inconsistência.  
-- **Templates reutilizáveis:** cada página é renderizada dinamicamente.  
-- **Alertas e feedbacks:** estrutura visual para notificações simples.  
-
----
-
-## Responsividade  
-
-A aplicação é totalmente responsiva e se adapta automaticamente a diferentes tamanhos de tela:
-
-- Desktop (≥ 1200px)  
-- Tablet (768px – 992px)  
-- Mobile (≤ 768px)
-
-Menus, textos, cards e imagens ajustam-se para garantir boa leitura e navegação fluida.
-
----
-
-## Tecnologias Utilizadas  
-
-- **HTML5**  
-- **CSS3 (Flexbox, Grid e variáveis customizadas)**  
-- **JavaScript (ES6+ modular)**  
-- **Git e GitHub**
-
----
-
-## Como Visualizar  
-
-1. Acesse o link público do repositório no GitHub:  
-   [https://github.com/aldehalbino/Entrega-III---ONG-Vinculo-de-Amor](#)
-
-2. Clique em **Code → Download ZIP**  
-
-3. Extraia a pasta e abra o arquivo **index.html** no navegador.  
-
----
-
-## Autoria  
-
-**Aldenize Albino de Oliveira**  
-Disciplina: Desenvolvimento Front-End
-Ano: 2025
+✅ Versionamento GitFlow aplicado corretamente.  
+✅ Acessibilidade implementada (WCAG 2.1 - Nível AA).  
+✅ Código otimizado para produção.  
+✅ Documentação técnica finalizada.  
+✅ Repositório público e funcional para avaliação.  
